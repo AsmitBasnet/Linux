@@ -1,0 +1,203 @@
+
+#!/bin/bash
+count=4
+name=$1
+idno=$2
+function validation ()  #Validiton of secret key.
+{
+	  
+	until [ $count -lt 0 ] #Use of util loop
+	do
+        read -s -p "Enter Password:" key
+        echo
+        if  [[ $key == "program" ]] # the word program is set as the secret key 
+        then
+                echo -e "\n Welcome to the program $OK \n id :$idno \n Name: $name \n date: $(date) \n\n\n"
+                country
+       else
+		echo -e "\n Enter the correct password \n Tries left: $count"
+		count=$(( $count - 1 ))
+        fi
+	done
+	exit
+}
+function country () 
+{
+                echo -e "\nChoose the code for Which is the best football team: \n\n\n"
+                echo -e "\n\n Code \t Country \n BRZ \t Brazil \n ARG \t Argentina \n NEP \t Nepal \n CHI \t China \n ENG \t England"
+                echo
+                read Code
+                                upper=${Code^^}
+                case "$upper" in # Case is used to validate the user input for the best football team code
+                "BRZ")
+			echo -e "\n You choosed the right option. Congratulation"
+			echo -e "\n Here is some information about the team you choosed"
+                        echo -e "\n Brazil \n The Brazil represent the countries best football player. Brazil is the most successful national team in the FIFA World Cup, being crowned winner five times. \n In FIFA's ranking system Brazil holds the record for most Team of the Year wins with 12. Brazil is the only national team to have won the World Cup on four different continents . \n\n\n"
+			;;
+		"ARG")
+		        echo -e "\n You choosed the Wrong option. \n Try Again"
+ 			echo -e "\n Here is some information about the team you choosed" 
+                        echo -e "\n Argentina \n The Argentina footaball team alsohas appeared in five World Cup finals, including the first final in 1930, which they lost 4–2 to Uruguay. It is , led by Lionel Messi, made their fifth appearance in a World Cup final in 2014, again losing to Germany, 1–0 during extra-time."
+				country
+                        ;;
+                "NEP")
+			echo -e "\n You choosed the Wrong option. \n Try Again"
+			echo -e "\n Here is some information about the team you choosed"
+                        echo -e "\n Nepal \n The nepal  men's football  team  is governed by the All Nepal Football Association (. Nepal played their first international match on 13 October 1972, where they lost 2–6 to the People's Republic of China. . The first Nepali footballer to score the first international goal for Nepal in a FIFA-recognized tournament was Y.B Ghale. Ghale scored against Kuwait in the 1982 Asian Games. \n"
+                        country
+			;;
+                "CHI")
+			echo -e "\n You choosed the Wrong option. \n Try Again"
+			echo -e "\n Here is some information about the team you choosed"
+                        echo -e "\n China\n China association football is governed by the Chinese Football Association..China won the EAFF East Asian Cup in 2005 and 2010, was runner-up at the AFC Asian Cup in 1984 and 2004, and made its sole FIFA World Cup appearance in 2002, losing all matches without scoring a goal."
+                        country
+			;;
+                "ENG")
+			echo -e "\n You choosed the Wrong option. \n Try Again"
+			echo -e "\n Here is some information about the team you choosed"
+                        echo -e "\n England \n The england Football team  is controlled by The Football Association (FA), the governing body for football in England, which is affiliated with UEFA and comes under the global jurisdiction of world football's governing body FIFA. hey played in the world's first international football match in 1872, against Scotland.. They won the 1966 World Cup, when they also hosted the finals, and finished fourth in both 1990 and 2018."
+			country
+			;;
+                *)
+                        echo -e "\n Choose the code from the option"
+                        country
+                        ;;
+        esac
+	playerselection
+}
+playerselection() 
+{
+echo -e "\n\t\tPlayer Name\t\tCodeNo\n"
+echo -e "\t\tLionel Messi\t\tLM"
+echo -e "\t\tNeymar Junior\t\tNJ"
+echo -e "\t\tKiran Chemjong\t\tKC"
+echo -e "\t\tZheng Zhi\t\tZZ"
+echo -e "\t\tHarry Kane\t\tHK\n\n"
+echo -e "Choose code of three players giving the space:-\c"
+read player1 player2 player3
+        player=(${player1^^} ${player2^^} ${player3^^})
+ if [[ ${#player[@]} != 3 ]] 
+        then
+        echo "Plz add Three different input"
+        echo
+        playerselection
+elif [ ${player[0]} != ${player[1]} ] && [ ${player[1]} != ${player[2]} ] && [ ${player[0]} != ${player[2]} ] #To check if there is no repeatation of user input of same code. 
+then
+
+        for u in "${player[@]}" #for loop is used tho search for each player in the array player
+        do
+        case "$u" in  # The case is used to validare and choose the three player by the user and inser it in to selectPlayer array 
+                "LM")
+                       selectPlayer+=(LM)
+                        ;;
+                "NJ")
+                        selectPlayer+=(NJ)
+                        ;;
+                "KC")
+                        selectPlayer+=(KC)
+                        ;;
+                "ZZ")
+                        selectPlayer+=(ZZ)
+                        ;;
+                "HK")
+                        selectPlayer+=(HK)
+                        ;;
+                *)
+                        echo -e " ERROR Choose the code from the option \n"
+                        unset selectPlayer # selectPlayer array let to null
+                        unset player # player array set to null
+                        playerselection
+                        break
+                        ;;
+        esac
+        done
+
+else
+        echo "Donot insert duplicate value"
+	playerselection
+fi
+codeselection
+}
+codeselection() 
+{
+
+PS3="Choose one code of the player"
+select choose in ${selectPlayer[0]} ${selectPlayer[1]} ${selectPlayer[2]} #Here select is used to create a list of three user choosen player. And let user to choose one player. 
+do
+        if [[ -z $choose ]] # to check if the array choose contains null value.
+        then
+                echo "index out of range"
+		codeselection
+        elif [[ -r $choose ]] 
+	then
+		echo -e "$choose is  code for the best  star player in football \n"
+                cat $choose
+		conti
+		break
+
+        else
+        echo -e "Data is not available\n\n"
+		unset selectPlayer
+                unset player
+		country
+        fi
+        break
+        done
+}
+conti() {
+        
+        echo -e "Do you want to start again? Type 'yes' to continue and 'no' to exit the program.\e"
+        read var
+        var=${var^^}
+        if [ $var == "YES" ]
+        then
+              unset selectPlayer
+              unset player
+              country
+        else
+              echo "*Thank You*"
+                exit
+       fi
+}
+
+        
+
+if [ -z $name ] || [ -z $idno ];
+then
+      echo " Enter user name and id to run the program"
+                exit
+
+else
+        until [ $count -lt 0 ]
+do
+        if ! [[ $name =~ [Aa-Zz]+$ ]] || ! [[ $idno =~ [0-9]+$ ]];
+        then 
+            echo -e "Enter name as alphabet and id as number."
+            exit
+        fi 
+
+        echo -e "Please Enter the programe name: \c"
+        read OK
+        if [[ $OK == "" ]]
+        then
+        echo -e "Programe Name cannot be empty"
+        count=$(( $count - 1 ))
+        if [ $count == 0 ]
+        then
+        echo -e "No attempt left. sorry."
+        exit
+        fi
+        else
+        echo ----------------------
+        echo "Programename: $OK"
+        echo "Username: $1"
+        echo "idnumber:$2"
+        echo ----------------------
+        validation
+fi
+done
+exit
+fi
+
+
+
